@@ -9,36 +9,107 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <script>
-      window.addEventListener('load', function() {
-        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-        if (typeof web3 !== 'undefined') {
-
-          // Use the browser's ethereum provider
-          var provider = web3.currentProvider         
-        } else {
-          console.log('No web3? You should consider trying MetaMask!')
-        }
-      })
-
       
     </script>
 
     <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Welcome to LoFund(Lotto&Fund)</h1>
-    <h2>Server Eth Account: <%= account1 %></h2>
-    <h2>Client Eth Account: </h2>
-    <div id="clientAccount"></div>
+    <h1>Welcome to LoFun(Lotto&Fund)</h1>
+    <br>
+    <h3>LoFun is a service that helps you to raise/join Fund based on Smart Contract.</h3>
+    <br><br><br>
+
+    <h2><b>[Loto Ver0.1]</b> : 0.01ETH, Pick a winner every 5 persons.</h2>
+    <h3>Contract Address: <a href="https://rinkeby.etherscan.io/address/0x6FF25B3186371Ade81311260d237396CE7900aeD" target="about:blank">0x6FF25B3186371Ade81311260d237396CE7900aeD</a></h3>
+    <button onclick="buyTicket('0x6FF25B3186371Ade81311260d237396CE7900aeD')">Buy a Ticket</button>
+
+    <h3>Participant List</h3>
+    <div id="ParticipantList"></div>
+    <%- participantList %>
+
+    <h3>Last Winners/Reward</h3>
+    <%- winnerList %>
+
+    <br><br><br>
+    <h1>Test Script</h1>
+    <h3>Server Node Eth Account: <%= account1 %></h3>    
+    <h3>Client Node Status: <div id="clientStatus" style='display:inline;''></div></h3>
+    <h2>
+      <div id="clientAccount"></div>
+    </h2>
+        
+
+    <h3>Web3 Version</h3>
+    <div id="Result_getWeb3Version"></div>
+
+
+    
+
+    <script type="text/javascript">
+      var account = "";//Please, Select your account in your Wallet Service.";
+      window.addEventListener('load', function() {
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof web3 !== 'undefined') {
+
+          // Use the browser's ethereum provider
+          var provider = web3.currentProvider         
+          console.log('Web3 is defined.')
+
+          document.getElementById('clientStatus').innerText = 'Web3 is detected.';
+
+          //account = web3.eth.accounts[0];
+          var accountInterval = setInterval(function() {
+            if (web3.eth.accounts[0] !== account) {
+              account = web3.eth.accounts[0];
+              updateAccount();
+            }
+          }, 100);
+
+        } else {
+          console.log('No web3? You should consider trying MetaMask!')
+          document.getElementById('clientStatus').innerText = 'No Web3 Service. Please check your MetaMask!';    
+        }
+      })            
+      // version
+      var version = web3.version.api;
+      document.getElementById('Result_getWeb3Version').innerText = 'version : ' + version;
+      document.getElementById('clientAccount').innerText = '';
+
+      function updateAccount(){
+        document.getElementById('clientAccount').innerText = 'Client Node Eth Account:' + account;        
+      }
+
+      // Contract
+      var contractAddress = '0x6FF25B3186371Ade81311260d237396CE7900aeD';
+      var abi = '[ { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "winners", "outputs": [ { "name": "", "type": "address", "value": "0x85f37d9cd74e39a0aa220e0104410c5f4c611d1a" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "recvEther", "outputs": [ { "name": "", "type": "uint256", "value": "100000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "prizes", "outputs": [ { "name": "", "type": "uint256", "value": "1120000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "prize", "outputs": [ { "name": "", "type": "uint256", "value": "600000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x15697964ce7216fc8845001be0f9077e5eb2a267" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "sender", "outputs": [ { "name": "", "type": "address", "value": "0x85f37d9cd74e39a0aa220e0104410c5f4c611d1a" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "totalEther", "outputs": [ { "name": "", "type": "uint256", "value": "2660000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getRecvEther", "outputs": [ { "name": "", "type": "uint256[]", "value": [ "100000000000000000", "1000000000000000000", "100000000000000000", "100000000000000000", "100000000000000000", "100000000000000000", "100000000000000000", "100000000000000000", "110000000000000000", "100000000000000000", "100000000000000000", "110000000000000000", "120000000000000000", "120000000000000000", "300000000000000000" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getPrizes", "outputs": [ { "name": "", "type": "uint256[]", "value": [ "1120000000000000000", "408000000000000000", "600000000000000000" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getLastSender", "outputs": [ { "name": "", "type": "address[]", "value": [ "0x85f37d9cd74e39a0aa220e0104410c5f4c611d1a", "0x15697964ce7216fc8845001be0f9077e5eb2a267", "0x72ce752aa8cebd73743d48f04be7fe8427d42ce3", "0x72ce752aa8cebd73743d48f04be7fe8427d42ce3", "0x72ce752aa8cebd73743d48f04be7fe8427d42ce3", "0x6f357f0353e12b933e6caa46dd8cfd5b3713bb62", "0x85f37d9cd74e39a0aa220e0104410c5f4c611d1a", "0x72ce752aa8cebd73743d48f04be7fe8427d42ce3", "0x15697964ce7216fc8845001be0f9077e5eb2a267", "0x6f357f0353e12b933e6caa46dd8cfd5b3713bb62", "0x85f37d9cd74e39a0aa220e0104410c5f4c611d1a", "0x6f357f0353e12b933e6caa46dd8cfd5b3713bb62", "0x72ce752aa8cebd73743d48f04be7fe8427d42ce3", "0x15697964ce7216fc8845001be0f9077e5eb2a267", "0x6f357f0353e12b933e6caa46dd8cfd5b3713bb62" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getBlockTimeStamp", "outputs": [ { "name": "", "type": "uint256[]", "value": [ "1519490061", "1519490061", "1519490331", "1519490421", "1519490496", "1519490571", "1519490841", "1519491111", "1519491171", "1519491261", "1519491696", "1519491741", "1519491786", "1519491831", "1519491951" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "n", "outputs": [ { "name": "", "type": "uint256", "value": "15" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "N", "outputs": [ { "name": "", "type": "uint256", "value": "5" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getWinners", "outputs": [ { "name": "", "type": "address[]", "value": [ "0x85f37d9cd74e39a0aa220e0104410c5f4c611d1a", "0x6f357f0353e12b933e6caa46dd8cfd5b3713bb62", "0x15697964ce7216fc8845001be0f9077e5eb2a267" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "turn", "type": "uint256" }, { "indexed": false, "name": "winner", "type": "address" }, { "indexed": false, "name": "prize", "type": "uint256" }, { "indexed": false, "name": "fee", "type": "uint256" } ], "name": "Result", "type": "event" }, { "constant": false, "inputs": [], "name": "close", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "payable": true, "stateMutability": "payable", "type": "fallback" } ]';
+
+      var contract = web3.eth.contract(JSON.parse(abi)).at(contractAddress);
+      var ParticipantList = contract.getLastSender(callBack);
+      console.log(ParticipantList);
+      //document.getElementById('ParticipantList').innerText = ParticipantList;
+
+      // Button
+      function buyTicket(addr) {
+        var sender = account;
+        var receiver = addr;//'0x5bFFF73baa916BFd05dC3cbd7a9254e092165258';
+        var amount = web3.toWei(0.01, "ether");
+
+        web3.eth.sendTransaction({from:sender, to:receiver, value: amount}, callBack);        
+      }
+
+      function callBack(error,result){
+        if(!error)
+            console.log(JSON.stringify(result));
+        else
+            console.error(error);
+      }
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <script type="text/javascript">
-      document.getElementById("clientAccount").innerHTML = "My new text!";​
-    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>    
   </body>
 </html>
