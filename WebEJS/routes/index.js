@@ -19,13 +19,8 @@ console.log(result);
 console.log(result.length);
 var participantList='';
 var cnt = 0;
-for(var i = result.length - 1 ; i >= 0; i--){
+for(var i = result.length - 1 ; i > result.length - 6; i--){
 	participantList = participantList + result[i] + '<br>'
-	cnt++;
-	if(cnt>5) {
-		participantList = participantList + '...<br>'
-		break;
-	}
 }
 console.log(participantList);
 
